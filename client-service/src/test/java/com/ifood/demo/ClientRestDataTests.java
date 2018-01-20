@@ -131,13 +131,15 @@ public class ClientRestDataTests {
 		
 		this.mockMvc.perform(get(searchUrl).contextPath("/v1"))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("_links", hasKey("findByNameIgnoreCaseContaining")))
-			.andExpect(jsonPath("_links", hasKey("findByPhoneIgnoreCaseContaining")))
-			.andExpect(jsonPath("_links", hasKey("findByEmailIgnoreCaseContaining")))
+			.andExpect(jsonPath("_links", hasKey("byName")))
+			.andExpect(jsonPath("_links", hasKey("byPhone")))
+			.andExpect(jsonPath("_links", hasKey("byEmail")))
+			.andExpect(jsonPath("_links", hasKey("byNameAndPhone")))
 			.andExpect(jsonPath("_links.self.href", is("http://localhost/v1/clients/search")))
-			.andExpect(jsonPath("_links.findByNameIgnoreCaseContaining.href", is("http://localhost/v1/clients/search/byName{?name}")))
-			.andExpect(jsonPath("_links.findByPhoneIgnoreCaseContaining.href", is("http://localhost/v1/clients/search/byPhone{?phone}")))
-			.andExpect(jsonPath("_links.findByEmailIgnoreCaseContaining.href", is("http://localhost/v1/clients/search/byEmail{?email}")))
+			.andExpect(jsonPath("_links.byName.href", is("http://localhost/v1/clients/search/byName{?name}")))
+			.andExpect(jsonPath("_links.byPhone.href", is("http://localhost/v1/clients/search/byPhone{?phone}")))
+			.andExpect(jsonPath("_links.byEmail.href", is("http://localhost/v1/clients/search/byEmail{?email}")))
+			.andExpect(jsonPath("_links.byNameAndPhone.href", is("http://localhost/v1/clients/search/byNameAndPhone{?name,phone}")))
 			.andReturn().getResponse().getContentAsString();
 	}
 
@@ -229,53 +231,61 @@ public class ClientRestDataTests {
 								.replace("http://localhost","");
 		
 		String searchContent = this.mockMvc.perform(get(searchUrl).contextPath("/v1"))
-						.andExpect(status().isOk())
-						.andExpect(jsonPath("_links", hasKey("findByNameIgnoreCaseContaining")))
-						.andExpect(jsonPath("_links", hasKey("findByEmailIgnoreCaseContaining")))
-						.andExpect(jsonPath("_links", hasKey("findByPhoneIgnoreCaseContaining")))
-						.andExpect(jsonPath("_links.self.href", is("http://localhost/v1/clients/search")))
-						.andExpect(jsonPath("_links.findByNameIgnoreCaseContaining.href", is("http://localhost/v1/clients/search/byName{?name}")))
-						.andExpect(jsonPath("_links.findByEmailIgnoreCaseContaining.href", is("http://localhost/v1/clients/search/byEmail{?email}")))
-						.andExpect(jsonPath("_links.findByPhoneIgnoreCaseContaining.href", is("http://localhost/v1/clients/search/byPhone{?phone}")))
-						.andReturn().getResponse().getContentAsString();
+								.andReturn().getResponse().getContentAsString();
 		
-		String searchByNameUrl = jsonPathValue(searchContent, "_links.findByNameIgnoreCaseContaining.href")
-								.replace("http://localhost","").replace("{", "").replace("}", "=");
-		String searchByNameParam = "{"+searchByNameUrl.split("\\?|=")[1]+"}";
-		
-		String searchByEmailUrl = jsonPathValue(searchContent, "_links.findByEmailIgnoreCaseContaining.href")
-								.replace("http://localhost","").replace("{", "").replace("}", "=");
-		String searchByEmailParam = "{"+searchByEmailUrl.split("\\?|=")[1]+"}";
-		
-		String searchByPhoneUrl = jsonPathValue(searchContent, "_links.findByPhoneIgnoreCaseContaining.href")
-								.replace("http://localhost","").replace("{", "").replace("}", "=");
-		String searchByPhoneParam = "{"+searchByPhoneUrl.split("\\?|=")[1]+"}";
+		String searchByNameUrl = buildSearchUrl(searchContent, "_links.byName.href");
+		String searchByEmailUrl = buildSearchUrl(searchContent, "_links.byEmail.href");
+		String searchByPhoneUrl = buildSearchUrl(searchContent, "_links.byPhone.href");
+		String searchByNameAndPhoneUrl = buildSearchUrl(searchContent, "_links.byNameAndPhone.href");
 		
 		this.mockMvc.perform(post(clientsUrl).contextPath("/v1").contentType(contentType).content(json(client1))).andExpect(status().isCreated());
 		this.mockMvc.perform(post(clientsUrl).contextPath("/v1").contentType(contentType).content(json(client2))).andExpect(status().isCreated());
 		this.mockMvc.perform(post(clientsUrl).contextPath("/v1").contentType(contentType).content(json(client3))).andExpect(status().isCreated());
 		
-		this.mockMvc.perform(get(searchByNameUrl+searchByNameParam, client1.getName()).contextPath("/v1"))
+		this.mockMvc.perform(get(searchByNameUrl, "Silva").contextPath("/v1"))
+					.andExpect(status().isOk())
+					.andExpect(jsonPath("_embedded.clients", hasSize(3)));
+		
+		this.mockMvc.perform(get(searchByNameUrl, client1.getName()).contextPath("/v1"))
 					.andExpect(status().isOk())
 					.andExpect(jsonPath("_embedded.clients", hasSize(1)))
 					.andExpect(jsonPath("_embedded.clients[0].name", is(client1.getName())))
 					.andExpect(jsonPath("_embedded.clients[0].email", is(client1.getEmail())))
 					.andExpect(jsonPath("_embedded.clients[0].phone", is(client1.getPhone())));
 		
-		this.mockMvc.perform(get(searchByEmailUrl+searchByEmailParam, client2.getEmail()).contextPath("/v1"))
+		this.mockMvc.perform(get(searchByEmailUrl, client2.getEmail()).contextPath("/v1"))
 					.andExpect(status().isOk())
 					.andExpect(jsonPath("_embedded.clients", hasSize(1)))
 					.andExpect(jsonPath("_embedded.clients[0].name", is(client2.getName())))
 					.andExpect(jsonPath("_embedded.clients[0].email", is(client2.getEmail())))
 					.andExpect(jsonPath("_embedded.clients[0].phone", is(client2.getPhone())));
 		
-		this.mockMvc.perform(get(searchByPhoneUrl+searchByPhoneParam, client3.getPhone()).contextPath("/v1"))
+		this.mockMvc.perform(get(searchByPhoneUrl, client3.getPhone()).contextPath("/v1"))
 					.andExpect(status().isOk())
 					.andExpect(jsonPath("_embedded.clients", hasSize(1)))
 					.andExpect(jsonPath("_embedded.clients[0].name", is(client3.getName())))
 					.andExpect(jsonPath("_embedded.clients[0].email", is(client3.getEmail())))
 					.andExpect(jsonPath("_embedded.clients[0].phone", is(client3.getPhone())));
 		
+		this.mockMvc.perform(get(searchByNameAndPhoneUrl, "Silva", "4321").contextPath("/v1"))
+					.andExpect(status().isOk())
+					.andExpect(jsonPath("_embedded.clients", hasSize(1)))
+					.andExpect(jsonPath("_embedded.clients[0].name", is(client2.getName())))
+					.andExpect(jsonPath("_embedded.clients[0].email", is(client2.getEmail())))
+					.andExpect(jsonPath("_embedded.clients[0].phone", is(client2.getPhone())));
+	}
+	
+	private String buildSearchUrl(String searchContent, String jsonPath ) throws IOException {
+		
+		String jsonValue = jsonPathValue(searchContent, jsonPath);
+		String searchUrl = jsonValue.replace("http://localhost", "").split("\\?")[0].replace("{", "?");
+		String[] searchParams = jsonValue.split("\\?")[1].split(",|}");
+		
+		for (String param : searchParams) {
+			searchUrl += param + "={" + param + "}&";
+		}
+		
+		return searchUrl;
 	}
 
 }

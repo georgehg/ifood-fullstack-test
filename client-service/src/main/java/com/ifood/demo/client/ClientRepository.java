@@ -10,12 +10,15 @@ import org.springframework.data.rest.core.annotation.RestResource;
 
 public interface ClientRepository extends CrudRepository<Client, UUID> {
 
-	@RestResource(path = "byName")
+	@RestResource(path = "byName", rel = "byName")
 	Collection<Client> findByNameIgnoreCaseContaining(@Param("name") String name);
 	
-	@RestResource(path = "byPhone")
+	@RestResource(path = "byPhone", rel = "byPhone")
 	Collection<Client> findByPhoneIgnoreCaseContaining(@Param("phone") String phone);
 	
-	@RestResource(path = "byEmail")
+	@RestResource(path = "byEmail", rel = "byEmail")
 	Collection<Client> findByEmailIgnoreCaseContaining(@Param("email") String email);
+	
+	@RestResource(path = "byNameAndPhone", rel = "byNameAndPhone")
+	Collection<Client> findByNameIgnoreCaseContainingAndPhoneIgnoreCaseContaining(@Param("name") String name, @Param("phone") String phone);
 }
