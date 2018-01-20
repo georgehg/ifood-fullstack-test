@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @SpringBootTest
 public class ClientApplicationTests {
 
-	@Autowired 
+	@Autowired
 	ClientRepository clientRepository;
 
 	@Test
@@ -29,9 +29,9 @@ public class ClientApplicationTests {
 		for (Client client : clientRepository.findAll()) {
 			log.info("Hello {}", client.toString());
 		}
-		
+
 		for (Client client : clientRepository.findByNameIgnoreCaseContaining("doe")) {
-			log.info("Hello 'Doe' {}", client.toString());		
+			log.info("Hello 'Doe' {}", client.toString());
 		}
 
 	}
