@@ -7,22 +7,17 @@
 
 const restify = require('restify-clients');
 const Promise = require('promise');
+const services = require('./services');
 
-// Creates a JSON client
-const clientServiceRequest = restify.createJsonClient({
-  url: 'http://localhost:8081',
-  retry: false
-});
+const discoverServices = function() {
 
-const apiVersion = 'v1';
-const basePath = '/' + apiVersion;
-const rejectRelations = ['self', 'profile'];
-
-const discoverRoutes = function(baseUrl) {
-
-  let clientServiceEndpoints = {
-    verions: apiVersion
+  let clientServices = {
+    version: 'v1'
   };
+
+  let clientServiceRequest = restify.createJsonClient({    
+    retry: false
+  });
 
   const addRoutes = function(endPointObj) {
 
@@ -43,7 +38,7 @@ const discoverRoutes = function(baseUrl) {
 
           Object.keys(obj._links).forEach(function(rel) {
             endPointLinks[rel] = {href: obj._links[rel].href};
-            if(rejectRelations.indexOf(rel) == -1 && !obj._links[rel].templated ) {
+            if(service.discard_endpoints.indexOf(rel) == -1 && !obj._links[rel].templated ) {
               promisesList.push(addRoutes({rel: rel, url: obj._links[rel].href}));
             }
           });
@@ -59,14 +54,29 @@ const discoverRoutes = function(baseUrl) {
             });
 
         } else {
-          reject(obj);
+          resolve({rel: endPointObj.rel});
         }
       };
     });
-  }
+  };
 
-  return addRoutes({rel: apiVersion, url: baseUrl});
+  let promisesList = [];
+  Object.keys(services[clientServices.version])
+    .forEach(function(serviceName) {
+      const service = services[clientServices.version][serviceName];
+      clientServiceRequest.url = 'http://' + service.host + ":" + service.port;
+      console.log(clientServiceRequest.url);
+      promisesList.push(addRoutes({rel: service.version, url: service.basePath}));    
+    });
+
+  Promise.all(promisesList)
+    .then(function(services) {
+      Object.assign(clientServices, services);
+      return clientServices;
+    });
 
 };
 
-module.exports = Object.assign({}, { discoverRoutes })
+console.log(discoverServices());
+
+module.exports = discoverServices;
