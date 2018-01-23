@@ -7,7 +7,7 @@
 
 const restify = require('restify-clients');
 const Promise = require('promise');
-const services = require('./services');
+const services = require('./services.js');
 
 const discoverServices = function() {
 
