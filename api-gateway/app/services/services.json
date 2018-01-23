@@ -1,17 +1,15 @@
 {"v1": {
-        "client-service-v1": {
+        "client_service": {
             "version": "v1",
             "basePath": "/v1",        
             "host": "localhost",
-            "port": "8081",
-            "discard_endpoints": ["self", "profile"]
+            "port": "8081"            
         },
-        "order-service-v1": {
+        "order_service": {
             "version": "v1",
             "basePath": "/v1",        
             "host": "localhost",
-            "port": "8082",
-            "discard_endpoints": ["self", "profile"]
+            "port": "8082"
         }
     }
 }

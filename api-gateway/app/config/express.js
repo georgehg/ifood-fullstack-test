@@ -9,9 +9,12 @@ const express = require('express');
 const consign = require('consign');
 
 const app = express();
+app.disable('body-parser');
 
 consign({cwd: 'app'})
-	.include('api')
+	.include('services/services.json')
+	.then('services')
+	.then('api')
 	.then('routes')
 	.into(app);
 
