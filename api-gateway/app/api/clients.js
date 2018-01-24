@@ -50,8 +50,8 @@ const api = function(app) {
     function _search(query) {
         return new Promise(function(resolve, reject) {
 
-             if (!query) {
-                reject("Invalid query params!");
+            if (!query) {
+                resolve({statusCode: 400, content: "Query params can not be empty!"});
             }
             
             let clientSearchUrl;
@@ -64,8 +64,8 @@ const api = function(app) {
                 }
             });
 
-            if (!clientSearchUrl) {
-                reject("Invalid query params!");
+            if (!orderSearchUrl) {
+                resolve({statusCode: 400, content: "Invalid query params!"});
             }
 
             request({url: clientSearchUrl}, function(err, resp, body) {
