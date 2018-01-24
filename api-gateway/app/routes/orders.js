@@ -7,16 +7,30 @@
 
 const routes = function(app) {
 
-	const _clientApi = app.api.clients;
+	const orderApi = app.api.orders;
 
-	app.get('/orders/search', function(req, res) {
-		_clientApi.search().then(function(clients) {
+	app.get('/orders', function(req, res) {
+
+		orderApi.list().then(function(clients) {
 			if (!clients.error && clients.statusCode == 200) {
 				res.json(clients.content);
 			} else {
 				res.send(clients.statusCode);
 			}
 		});
+		
+	});
+
+	app.get('/orders/:id', function(req, res) {
+
+		orderApi.find(req.params.id).then(function(clients) {
+			if (!clients.error && clients.statusCode == 200) {
+				res.json(clients.content);
+			} else {
+				res.send(clients.statusCode);
+			}
+		});
+
 	});
 
 }

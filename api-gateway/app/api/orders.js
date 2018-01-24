@@ -1,6 +1,6 @@
 /*
 * created by george.silva
-* 22.01.2018
+* 23.01.2018
 */
 
 'use strict'
@@ -10,7 +10,7 @@ const Promise = require('promise');
 
 const api = function(app) {
 
-    const responseHelper = app.helpers.responses;
+	const responseHelper = app.helpers.responses;
 
     return {
         list: _list,
@@ -19,23 +19,23 @@ const api = function(app) {
     }
 
     function _list() {
-        const clientService = app.services.endpoints.v1.client_service;
+        const orderService = app.services.endpoints.v1.order_service;
         return new Promise(function(resolve, reject) {
-            request({url: clientService.clients.href}, function(err, resp, body) {
+            request({url: orderService.orders.href}, function(err, resp, body) {
                 if(err) {
                     console.log(err);
                     reject(err);                  
                 } else {
-                    resolve(responseHelper.handle(resp, body));
+                	resolve(responseHelper.handle(resp, body));
                 }
             });
         });
     }
 
     function _find(id) {
-        const clientService = app.services.endpoints.v1.client_service;
+        const orderService = app.services.endpoints.v1.order_service;
         return new Promise(function(resolve, reject) {
-            request({url: clientService.clients.href+"/"+id}, function(err, resp, body) {
+            request({url: order_service.orders.href+"/"+id}, function(err, resp, body) {
                 if(err) {
                     console.log(err);
                     reject(err);                  
@@ -47,9 +47,9 @@ const api = function(app) {
     }
 
     function _search(params) {
-        const clientService = app.services.endpoints.v1.client_service;
+        const orderService = app.services.endpoints.v1.order_service;
         return new Promise(function(resolve, reject) {
-            request({url: clientService.clients.links.search}, function(err, resp, body) {
+            request({url: orderService.orders.links.search}, function(err, resp, body) {
                 if(err) {
                     console.log(err);
                     reject(err);                  

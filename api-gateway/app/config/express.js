@@ -14,6 +14,7 @@ app.disable('body-parser');
 consign({cwd: 'app'})
 	.include('services/services.json')
 	.then('services')
+	.then('helpers')
 	.then('api')
 	.then('routes')
 	.into(app);

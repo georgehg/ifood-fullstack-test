@@ -5,7 +5,7 @@
 
 'use strict'
 
-const request = require('request').defaults({json: true});  
+const request = require('request').defaults({json: true});
 const Promise = require('promise');
 
 const discoverServices = function(app) {
@@ -21,9 +21,16 @@ const discoverServices = function(app) {
       request(endPointObj.url, getLinksComplete);
 
       function getLinksComplete(err, resp, body) {
+        //console.log(err, resp, body);
 
         if (err) {
-          reject(err);
+          reject({field: endPointObj.rel});
+          return;
+        };
+
+        if (!body) {
+          reject({field: endPointObj.rel});
+          return;
         };
 
         if (body._links) {
