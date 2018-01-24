@@ -11,25 +11,34 @@ const routes = function(app) {
 
 	app.get('/orders', function(req, res) {
 
-		orderApi.list().then(function(clients) {
-			if (!clients.error && clients.statusCode == 200) {
-				res.json(clients.content);
-			} else {
-				res.send(clients.statusCode);
-			}
-		});
+		orderApi.list()
+			.then(function(response) {
+				res.status(response.statusCode).json(response.content);
+			}).catch(function(reason) {
+				res.status(500).send(reason);
+			});
 		
 	});
 
+	app.get('/orders/search', function(req, res) {
+		
+		orderApi.search(req.query)
+			.then(function(response) {
+				res.status(response.statusCode).json(response.content);
+			}).catch(function(reason) {
+				res.status(500).send(reason);
+			});
+
+	});	
+
 	app.get('/orders/:id', function(req, res) {
 
-		orderApi.find(req.params.id).then(function(clients) {
-			if (!clients.error && clients.statusCode == 200) {
-				res.json(clients.content);
-			} else {
-				res.send(clients.statusCode);
-			}
-		});
+		orderApi.find(req.params.id)
+			.then(function(response) {
+				res.status(response.statusCode).json(response.content);
+			}).catch(function(reason) {
+				res.status(500).send(reason);
+			});
 
 	});
 

@@ -5,6 +5,7 @@
 
 'use strict'
 
+const _ = require('lodash');
 const request = require('request').defaults({json: true});    
 const Promise = require('promise');
 
@@ -19,9 +20,9 @@ const api = function(app) {
     }
 
     function _list() {
-        const orderService = app.services.endpoints.v1.order_service;
+        const orderListUrl = app.services.endpoints.v1.order_service.orders.href;
         return new Promise(function(resolve, reject) {
-            request({url: orderService.orders.href}, function(err, resp, body) {
+            request({url: orderListUrl}, function(err, resp, body) {
                 if(err) {
                     console.log(err);
                     reject(err);                  
@@ -33,9 +34,9 @@ const api = function(app) {
     }
 
     function _find(id) {
-        const orderService = app.services.endpoints.v1.order_service;
+        const orderFindUrl = app.services.endpoints.v1.order_service.orders.href;
         return new Promise(function(resolve, reject) {
-            request({url: order_service.orders.href+"/"+id}, function(err, resp, body) {
+            request({url: orderFindUrl+"/"+id}, function(err, resp, body) {
                 if(err) {
                     console.log(err);
                     reject(err);                  
@@ -46,13 +47,31 @@ const api = function(app) {
         });
     }
 
-    function _search(params) {
-        const orderService = app.services.endpoints.v1.order_service;
+    function _search(query) {
         return new Promise(function(resolve, reject) {
-            request({url: orderService.orders.links.search}, function(err, resp, body) {
+
+            if (!query) {
+                reject("Invalid query params!");
+            }
+            
+            let orderSearchUrl;
+            const orderSearch = app.services.endpoints.v1.order_service.orders.links.search.links;
+
+            //Resolve with search endpoint to use
+            _.forEach(orderSearch, function(fields, rel) {
+                if (_.difference(_.keys(query), fields.params).length == 0 ) {
+                    orderSearchUrl = orderSearch[rel].href;
+                }
+            });
+
+            if (!orderSearchUrl) {
+                reject("Invalid query params!");
+            }
+
+            request({url: orderSearchUrl}, function(err, resp, body) {
                 if(err) {
                     console.log(err);
-                    reject(err);                  
+                    reject(err);
                 } else {
                     resolve(responseHelper.handle(resp, body));
                 }

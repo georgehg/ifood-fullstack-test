@@ -5,9 +5,6 @@
 
 'use strict'
 
-const request = require('request').defaults({json: true});    
-const Promise = require('promise');
-
 const helper = function(app) {
 
 	return {
@@ -20,6 +17,7 @@ const helper = function(app) {
 
         if (resp.statusCode == 200) {
             if (body._embedded) {
+                // remove backend services links
                 Object.keys(body._embedded).forEach(function(entity) {
                     body._embedded[entity].forEach(function(entry) {
                         entry._links = undefined;

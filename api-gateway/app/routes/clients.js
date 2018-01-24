@@ -20,6 +20,17 @@ const routes = function(app) {
 		
 	});
 
+	app.get('/clients/search', function(req, res) {
+
+		clientApi.search(req.params.id)
+			.then(function(response) {
+				res.status(response.statusCode).json(response.content);
+			}).catch(function(reason) {
+				res.status(500).send();
+			});
+		
+	});
+
 	app.get('/clients/:id', function(req, res) {
 
 		clientApi.find(req.params.id)

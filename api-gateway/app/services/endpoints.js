@@ -40,7 +40,14 @@ const discoverServices = function(app) {
 
           Object.keys(body._links).forEach(function(rel) {
             if(_discard_endpoints.indexOf(rel) == -1) {
-              endPointLinks[rel] = {href: body._links[rel].href};            
+              endPointLinks[rel] = {href: body._links[rel].href};
+
+              if(body._links[rel].templated) {
+                let params = body._links[rel].href.split("{\?")[1].replace("}", "").split(",");
+                endPointLinks[rel].params = params;
+                endPointLinks[rel].href = endPointLinks[rel].href.split("{\?")[0];
+              }
+
               if(!body._links[rel].templated) {
                 promisesList.push(addRoutes({version: endPointObj.version, rel: rel, url: body._links[rel].href}));
               }
