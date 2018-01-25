@@ -91,6 +91,19 @@ public class ClientRestDataTests {
 		}
 		return treeNode.textValue();
 	}
+	
+	private String buildSearchUrl(String searchContent, String jsonPath ) throws IOException {
+		
+		String jsonValue = jsonPathValue(searchContent, jsonPath);
+		String searchUrl = jsonValue.replace("http://localhost", "").split("\\?")[0].replace("{", "?");
+		String[] searchParams = jsonValue.split("\\?")[1].split(",|}");
+		
+		for (String param : searchParams) {
+			searchUrl += param + "={" + param + "}&";
+		}
+		
+		return searchUrl;
+	}
 
 	@Before
 	public void setup() throws Exception {
@@ -112,17 +125,18 @@ public class ClientRestDataTests {
 		String apiContent = this.mockMvc.perform(get("/v1/").contextPath("/v1"))
 							.andExpect(status().isOk())
 							.andExpect(jsonPath("_links", hasKey("clients")))
-							.andExpect(jsonPath("_links.clients.href", is("http://localhost/v1/clients")))
+							.andExpect(jsonPath("_links.clients.href", is("http://localhost/v1/clients{?page,size,sort}")))
 							.andReturn().getResponse().getContentAsString();
 		
 		String clientsUrl = jsonPathValue(apiContent, "_links.clients.href")
-							.replace("http://localhost","");
+							.replace("http://localhost","")
+							.split("\\{")[0];
 		
 		String clientsContent = this.mockMvc.perform(get(clientsUrl).contextPath("/v1"))
 								.andExpect(status().isOk())
 								.andExpect(jsonPath("_links", hasKey("self")))
 								.andExpect(jsonPath("_links", hasKey("search")))
-								.andExpect(jsonPath("_links.self.href", is("http://localhost/v1/clients")))
+								.andExpect(jsonPath("_links.self.href", is("http://localhost/v1/clients{?page,size,sort}")))
 								.andExpect(jsonPath("_links.search.href", is("http://localhost/v1/clients/search")))
 								.andReturn().getResponse().getContentAsString();
 		
@@ -152,7 +166,8 @@ public class ClientRestDataTests {
 							.andReturn().getResponse().getContentAsString();
 		
 		String clientsUrl = jsonPathValue(apiContent, "_links.clients.href")
-							.replace("http://localhost","");
+							.replace("http://localhost","")
+							.split("\\{")[0];
 
 		String clientId = this.mockMvc.perform(post(clientsUrl).contextPath("/v1")
 							.contentType(contentType).content(json(newClient)))
@@ -177,7 +192,8 @@ public class ClientRestDataTests {
 							.andReturn().getResponse().getContentAsString();
 		
 		String clientsUrl = jsonPathValue(apiContent, "_links.clients.href")
-							.replace("http://localhost","");
+							.replace("http://localhost","")
+							.split("\\{")[0];
 
 		String clientId = this.mockMvc.perform(post(clientsUrl).contextPath("/v1")
 							.contentType(contentType).content(json(newClient)))
@@ -222,7 +238,8 @@ public class ClientRestDataTests {
 								.andReturn().getResponse().getContentAsString();
 		
 		String clientsUrl = jsonPathValue(apiContent, "_links.clients.href")
-								.replace("http://localhost","");
+								.replace("http://localhost","")
+								.split("\\{")[0];
 		
 		String clientsContent = this.mockMvc.perform(get(clientsUrl).contextPath("/v1"))
 								.andReturn().getResponse().getContentAsString();
@@ -273,19 +290,6 @@ public class ClientRestDataTests {
 					.andExpect(jsonPath("_embedded.clients[0].name", is(client2.getName())))
 					.andExpect(jsonPath("_embedded.clients[0].email", is(client2.getEmail())))
 					.andExpect(jsonPath("_embedded.clients[0].phone", is(client2.getPhone())));
-	}
-	
-	private String buildSearchUrl(String searchContent, String jsonPath ) throws IOException {
-		
-		String jsonValue = jsonPathValue(searchContent, jsonPath);
-		String searchUrl = jsonValue.replace("http://localhost", "").split("\\?")[0].replace("{", "?");
-		String[] searchParams = jsonValue.split("\\?")[1].split(",|}");
-		
-		for (String param : searchParams) {
-			searchUrl += param + "={" + param + "}&";
-		}
-		
-		return searchUrl;
 	}
 
 }

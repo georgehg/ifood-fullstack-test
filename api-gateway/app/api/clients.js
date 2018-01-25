@@ -11,7 +11,11 @@ const Promise = require('promise');
 
 const api = function(app) {
 
-	const responseHelper = app.helpers.responses;
+    const CLIENTS_URL_PATH = 'v1.client_service.clients.href';
+    const CLIENTS_SEARCH_PATH = 'v1.client_service.clients.links.search.links';
+
+    const responseHelper = app.helpers.responses;
+    const linkHelper = app.helpers.links;
 
     return {
         list: _list,
@@ -20,8 +24,14 @@ const api = function(app) {
     }
 
     function _list() {
-        const clientListUrl = app.services.endpoints.v1.client_service.clients.href;
+
         return new Promise(function(resolve, reject) {
+
+            const clientListUrl = linkHelper.getLink(CLIENTS_URL_PATH);
+            if (!clientListUrl) {
+                reject("Service not Available");
+            }
+
             request({url: clientListUrl}, function(err, resp, body) {
                 if(err) {
                     console.log(err);
@@ -34,8 +44,14 @@ const api = function(app) {
     }
 
     function _find(id) {
-        const clientFindUrl = app.services.endpoints.v1.client_service.clients.href;
+
         return new Promise(function(resolve, reject) {
+
+            const clientFindUrl = linkHelper.getLink(CLIENTS_URL_PATH);
+            if (!clientFindUrl) {
+                reject("Service not Available");
+            }
+
             request({url: clientFindUrl+"/"+id}, function(err, resp, body) {
                 if(err) {
                     console.log(err);
@@ -48,16 +64,21 @@ const api = function(app) {
     }
 
     function _search(query) {
+
         return new Promise(function(resolve, reject) {
 
             if (_.isEmpty(query)) {
                 resolve({statusCode: 400, content: "Query params can not be empty!"});
             }
             
-            let clientSearchUrl = {};
-            const clientSearch = app.services.endpoints.v1.client_service.clients.links.search.links;
+            
+            const clientSearch = linkHelper.getLink(CLIENTS_URL_PATH);
+            if (!clientSearch) {
+                reject("Service not Available");
+            }
 
-            //Resolve with search endpoint to use
+            let clientSearchUrl = {};
+            //Resolve witch search endpoint to use
             _.forEach(clientSearch, function(fields, rel) {
 
                 if (_.keys(query).length == fields.params.length &&

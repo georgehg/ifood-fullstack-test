@@ -11,89 +11,109 @@ const Promise = require('promise');
 const discoverServices = function(app) {
 
   const _discard_endpoints = ["self", "profile"];
-
   const _services = app.services.services;
 
-  const addRoutes = function(endPointObj) {
+  let _clientServices = undefined;
 
-    return new Promise(function(resolve, reject) {
+  return {
+    getEndPoints: getEndPoints
+  }
 
-      request(endPointObj.url, getLinksComplete);
+  function getEndPoints() {
 
-      function getLinksComplete(err, resp, body) {
-        //console.log(err, resp, body);
+    if (_clientServices) {
+      return Promise.resolve(_clientServices);
+    } else {
+      _clientServices = {};
+    };
+    
+    const addRoutes = function(endPointObj) {
 
-        if (err) {
-          reject({field: endPointObj.rel});
-          return;
-        };
+      return new Promise(function(resolve, reject) {
 
-        if (!body) {
-          reject({field: endPointObj.rel});
-          return;
-        };
+        request({url: endPointObj.url, qs: endPointObj.params}, getLinksComplete);
 
-        if (body._links) {
+        function getLinksComplete(err, resp, body) {
 
-          let endPointLinks = {};
-          let promisesList = [];
+          if (err) {
+            reject({field: endPointObj.rel, error: err});
+            return;
+          };
 
-          Object.keys(body._links).forEach(function(rel) {
-            if(_discard_endpoints.indexOf(rel) == -1) {
-              endPointLinks[rel] = {href: body._links[rel].href};
+          if (!body) {
+            reject({field: endPointObj.rel, error: "No content for Link: " + endPointObj.url});
+            return;
+          };
 
-              if(body._links[rel].templated) {
-                let params = body._links[rel].href.split("{\?")[1].replace("}", "").split(",");
-                endPointLinks[rel].params = params;
-                endPointLinks[rel].href = endPointLinks[rel].href.split("{\?")[0];
+          if (body._links) {
+
+            let endPointLinks = {};
+            let promisesList = [];
+
+            Object.keys(body._links).forEach(function(rel) {
+              if(_discard_endpoints.indexOf(rel) == -1) {
+                endPointLinks[rel] = {href: body._links[rel].href};
+
+                if(body._links[rel].templated) {
+                  let params = body._links[rel].href.split("{\?")[1].replace("}", "").split(",");
+                  endPointLinks[rel].params = params;
+                  endPointLinks[rel].href = endPointLinks[rel].href.split("{\?")[0];
+                }
+
+                if(!body._links[rel].templated) {
+                  const params = {};
+                  if (params.indexOf("sort") != -1) {
+                    params = {sort: 1};
+                  }
+                  promisesList.push(addRoutes({version: endPointObj.version, rel: rel, url: body._links[rel].href, params: params}));
+                }
               }
-
-              if(!body._links[rel].templated) {
-                promisesList.push(addRoutes({version: endPointObj.version, rel: rel, url: body._links[rel].href}));
-              }
-            }
-          });
-
-          Promise.all(promisesList)
-            .then(function(links) {
-              links.forEach(function(link) {
-                endPointLinks[link.rel].links = link.links;
-              });
-              resolve({version: endPointObj.version, rel: endPointObj.rel, links: endPointLinks});
-            }, function(err) {
-              console.log(err);
-              reject(err);
             });
 
-        } else {
-          resolve({field: endPointObj.rel});
-        }
-      };
-    });
-  };
+            Promise.all(promisesList)
+              .then(function(links) {
+                links.forEach(function(link) {
+                  endPointLinks[link.rel].links = link.links;
+                });
+                resolve({version: endPointObj.version, rel: endPointObj.rel, links: endPointLinks});
+              }).catch(function(reason) {
+                console.log(reason);
+                reject(reason);
+              });
 
-  let _clientServices = {};
-  let _promisesList = [];
+          } else {
+            resolve({field: endPointObj.rel});
+          };
 
-  Object.keys(_services).forEach(function(version) {
-    _clientServices[version] = {};
-    Object.keys(_services[version]).forEach(function(serviceName) {
-      _clientServices[version][serviceName] = {};
-      const service = _services[version][serviceName];
-      const serviceUrl = 'http://' + service.host + ":" + service.port + service.basePath;
-      _clientServices[version][serviceName].url = serviceUrl
-      _promisesList.push(addRoutes({version: version, rel: serviceName, url: serviceUrl}));    
-    });
-  });
+        };
+      });
+    };
 
-  Promise.all(_promisesList)
-    .then(function(services) {
-      services.forEach(function(service) {
-        _clientServices[service.version][service.rel] = service.links;
+    let _promisesList = [];
+
+    Object.keys(_services).forEach(function(version) {
+      _clientServices[version] = {};
+      Object.keys(_services[version]).forEach(function(serviceName) {
+        _clientServices[version][serviceName] = {};
+        const service = _services[version][serviceName];
+        const serviceUrl = 'http://' + service.host + ":" + service.port + service.basePath;
+        _clientServices[version][serviceName].url = serviceUrl
+        _promisesList.push(addRoutes({version: version, rel: serviceName, url: serviceUrl}));    
       });
     });
-  
-  return _clientServices;
+
+    return Promise.all(_promisesList)
+      .then(function(services) {
+        services.forEach(function(service) {
+          _clientServices[service.version][service.rel] = service.links;
+        });
+        return _clientServices;
+      }).catch(function(reason) {
+        console.log("Failed discovering services: " + JSON.stringify(reason))
+        _clientServices = undefined;
+        return _clientServices;
+      });
+  };
 
 };
 

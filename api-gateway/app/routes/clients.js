@@ -11,8 +11,6 @@ const routes = function(app) {
 
 	app.get('/clients', function(req, res) {
 
-		console.log('/clients');
-
 		clientApi.list()
 			.then(function(response) {
 				res.status(response.statusCode).json(response.content);

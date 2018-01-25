@@ -11,7 +11,11 @@ const Promise = require('promise');
 
 const api = function(app) {
 
-	const responseHelper = app.helpers.responses;
+    const ORDERS_URL_PATH = 'v1.order_service.orders.href';
+    const ORDERS_SEARCH_PATH = 'v1.order_service.orders.links.search.links';
+
+    const responseHelper = app.helpers.responses;
+    const linkHelper = app.helpers.links;
 
     return {
         list: _list,
@@ -20,8 +24,14 @@ const api = function(app) {
     }
 
     function _list() {
-        const orderListUrl = app.services.endpoints.v1.order_service.orders.href;
+
         return new Promise(function(resolve, reject) {
+
+            const orderListUrl = linkHelper.getLink(ORDERS_URL_PATH);
+            if (!orderListUrl) {
+                reject("Service not Available");
+            }
+
             request({url: orderListUrl}, function(err, resp, body) {
                 if(err) {
                     console.log(err);
@@ -34,8 +44,14 @@ const api = function(app) {
     }
 
     function _find(id) {
-        const orderFindUrl = app.services.endpoints.v1.order_service.orders.href;
+
         return new Promise(function(resolve, reject) {
+
+            const orderFindUrl = linkHelper.getLink(ORDERS_URL_PATH);
+            if (!orderFindUrl) {
+                reject("Service not Available");
+            }
+
             request({url: orderFindUrl+"/"+id}, function(err, resp, body) {
                 if(err) {
                     console.log(err);
@@ -48,16 +64,20 @@ const api = function(app) {
     }
 
     function _search(query) {
+
         return new Promise(function(resolve, reject) {
 
             if (_.isEmpty(query)) {
                 resolve({statusCode: 400, content: "Query params can not be empty!"});
-            }
+            }            
             
-            let orderSearchUrl = {};
-            const orderSearch = app.services.endpoints.v1.order_service.orders.links.search.links;
+            const orderSearch = linkHelper.getLink(ORDERS_URL_PATH);
+            if (!orderSearch) {
+                reject("Service not Available");
+            }
 
-            //Resolve with search endpoint to use
+            let orderSearchUrl = {};
+            //Resolve witch search endpoint to use
             _.forEach(orderSearch, function(fields, rel) {
 
                 if (_.keys(query).length == fields.params.length &&

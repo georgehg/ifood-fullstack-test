@@ -3,12 +3,12 @@ package com.ifood.demo.client;
 import java.util.Collection;
 import java.util.UUID;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 
-public interface ClientRepository extends CrudRepository<Client, UUID> {
+public interface ClientRepository extends PagingAndSortingRepository<Client, UUID> {
 
 	@RestResource(path = "byName", rel = "byName")
 	Collection<Client> findByNameIgnoreCaseContaining(@Param("name") String name);
