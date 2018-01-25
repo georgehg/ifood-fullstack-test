@@ -11,22 +11,24 @@ const routes = function(app) {
 
 	app.get('/clients', function(req, res) {
 
+		console.log('/clients');
+
 		clientApi.list()
 			.then(function(response) {
 				res.status(response.statusCode).json(response.content);
 			}).catch(function(reason) {
-				res.status(500).send();
+				res.status(500).send(reason);
 			});
 		
 	});
 
 	app.get('/clients/search', function(req, res) {
 
-		clientApi.search(req.params.id)
+		clientApi.search(req.query)
 			.then(function(response) {
 				res.status(response.statusCode).json(response.content);
 			}).catch(function(reason) {
-				res.status(500).send();
+				res.status(500).send(reason);
 			});
 		
 	});
@@ -37,7 +39,7 @@ const routes = function(app) {
 			.then(function(response) {
 				res.status(response.statusCode).json(response.content);
 			}).catch(function(reason) {
-				res.status(500).send();
+				res.status(500).send(reason);
 			});
 		
 	});

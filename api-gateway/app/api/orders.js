@@ -50,25 +50,27 @@ const api = function(app) {
     function _search(query) {
         return new Promise(function(resolve, reject) {
 
-            if (!query) {
+            if (_.isEmpty(query)) {
                 resolve({statusCode: 400, content: "Query params can not be empty!"});
             }
             
-            let orderSearchUrl;
+            let orderSearchUrl = {};
             const orderSearch = app.services.endpoints.v1.order_service.orders.links.search.links;
 
             //Resolve with search endpoint to use
             _.forEach(orderSearch, function(fields, rel) {
-                if (_.difference(_.keys(query), fields.params).length == 0 ) {
+
+                if (_.keys(query).length == fields.params.length &&
+                    _.difference(fields.params, _.keys(query)).length == 0 ) {
                     orderSearchUrl = orderSearch[rel].href;
                 }
             });
 
-            if (!orderSearchUrl) {
+            if (_.isEmpty(orderSearchUrl)) {
                 resolve({statusCode: 400, content: "Invalid query params!"});
             }
 
-            request({url: orderSearchUrl}, function(err, resp, body) {
+            request({url: orderSearchUrl, qs: query}, function(err, resp, body) {
                 if(err) {
                     console.log(err);
                     reject(err);
