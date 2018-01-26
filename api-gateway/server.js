@@ -14,6 +14,7 @@ app.listen(3000, function() {
 	app.services.endpoints.getEndPoints().then(function(endpoints) {
 		if (endpoints) {
 			console.log("Services discovered sucessfully!");
+			//console.log(JSON.stringify(endpoints));
 		} else {
 			console.log("Services discovered failed!");
 		}

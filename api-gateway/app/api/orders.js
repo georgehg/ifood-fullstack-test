@@ -6,8 +6,8 @@
 'use strict'
 
 const _ = require('lodash');
-const request = require('request').defaults({json: true});    
 const Promise = require('promise');
+const request = require('request').defaults({json: true});
 
 const api = function(app) {
 
@@ -27,40 +27,46 @@ const api = function(app) {
 
         return new Promise(function(resolve, reject) {
 
-            const orderListUrl = linkHelper.getLink(ORDERS_URL_PATH);
-            if (!orderListUrl) {
-                reject("Service not Available");
-            }
-
-            request({url: orderListUrl}, function(err, resp, body) {
-                if(err) {
-                    console.log(err);
-                    reject(err);                  
-                } else {
-                	resolve(responseHelper.handle(resp, body));
+            linkHelper.getLink(ORDERS_URL_PATH).then(function(orderListUrl) {
+                if (!orderListUrl) {
+                    reject("Service not Available");
                 }
+
+                request({url: orderListUrl}, function(err, resp, body) {
+                    if(err) {
+                        console.log(err);
+                        reject(err);                  
+                    } else {
+                        resolve(responseHelper.handle(resp, body));
+                    }
+                });            
             });
+
         });
     }
+
 
     function _find(id) {
 
         return new Promise(function(resolve, reject) {
 
-            const orderFindUrl = linkHelper.getLink(ORDERS_URL_PATH);
-            if (!orderFindUrl) {
-                reject("Service not Available");
-            }
-
-            request({url: orderFindUrl+"/"+id}, function(err, resp, body) {
-                if(err) {
-                    console.log(err);
-                    reject(err);                  
-                } else {
-                    resolve(responseHelper.handle(resp, body));
+            linkHelper.getLink(ORDERS_URL_PATH).then(function(orderFindUrl) {
+                if (!orderFindUrl) {
+                    reject("Service not Available");
                 }
+
+                request({url: orderFindUrl+"/"+id}, function(err, resp, body) {
+                    if(err) {
+                        console.log(err);
+                        reject(err);                  
+                    } else {
+                        resolve(responseHelper.handle(resp, body));
+                    }
+                });
             });
+
         });
+
     }
 
     function _search(query) {
@@ -71,34 +77,38 @@ const api = function(app) {
                 resolve({statusCode: 400, content: "Query params can not be empty!"});
             }            
             
-            const orderSearch = linkHelper.getLink(ORDERS_URL_PATH);
-            if (!orderSearch) {
-                reject("Service not Available");
-            }
+            linkHelper.getLink(ORDERS_SEARCH_PATH).then(function(orderSearch) {
 
-            let orderSearchUrl = {};
-            //Resolve witch search endpoint to use
-            _.forEach(orderSearch, function(fields, rel) {
-
-                if (_.keys(query).length == fields.params.length &&
-                    _.difference(fields.params, _.keys(query)).length == 0 ) {
-                    orderSearchUrl = orderSearch[rel].href;
+                if (!orderSearch) {
+                    reject("Service not Available");
                 }
+
+                let orderSearchUrl = {};
+                //Resolve witch search endpoint to use
+                _.forEach(orderSearch, function(fields, rel) {
+
+                    if (_.keys(query).length == fields.params.length &&
+                        _.difference(fields.params, _.keys(query)).length == 0 ) {
+                        orderSearchUrl = orderSearch[rel].href;
+                    }
+                });
+
+                if (_.isEmpty(orderSearchUrl)) {
+                    resolve({statusCode: 400, content: "Invalid query params!"});
+                }
+
+                request({url: orderSearchUrl, qs: query}, function(err, resp, body) {
+                    if(err) {
+                        console.log(err);
+                        reject(err);
+                    } else {
+                        resolve(responseHelper.handle(resp, body));
+                    }
+                });
             });
 
-            if (_.isEmpty(orderSearchUrl)) {
-                resolve({statusCode: 400, content: "Invalid query params!"});
-            }
-
-            request({url: orderSearchUrl, qs: query}, function(err, resp, body) {
-                if(err) {
-                    console.log(err);
-                    reject(err);
-                } else {
-                    resolve(responseHelper.handle(resp, body));
-                }
-            });
         });
+
     }
 
 }

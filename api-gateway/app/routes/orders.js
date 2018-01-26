@@ -21,13 +21,31 @@ const routes = function(app) {
 	});
 
 	app.get('/orders/search', function(req, res) {
-		
-		orderApi.search(req.query)
+
+		const orderQuery = _.pick(req.query, ['start', 'end']);
+		const clientQuery = _.difference(req.query, orderQuery);
+
+		if (_.key(orderQuery).length < 2) {
+        	res.status(400).json('Not enough query params:' + JSON.stringify(orderQuery));
+        }
+
+        if (_.key(clientQuery).length == 0) {
+        	res.status(400).json('Not enough query params:' + JSON.stringify(clientQuery));
+        }
+
+		clientApi.search(clientQuery)
 			.then(function(response) {
 				res.status(response.statusCode).json(response.content);
 			}).catch(function(reason) {
 				res.status(500).send(reason);
 			});
+		
+		/*orderApi.search(req.query)
+			.then(function(response) {
+				res.status(response.statusCode).json(response.content);
+			}).catch(function(reason) {
+				res.status(500).send(reason);
+			});*/
 
 	});	
 

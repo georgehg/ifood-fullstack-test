@@ -6,6 +6,7 @@
 'use strict'
 
 const _ = require('lodash');
+const Promise = require('promise');
 
 const helper = function(app) {
 
@@ -14,8 +15,10 @@ const helper = function(app) {
 	}
 
     function _getLink(path) {
-        const endpoints = app.services.endpoints;
-        return _.get(endpoints, path);
+        return Promise.resolve(app.services.endpoints.getEndPoints())
+        	.then(function(endpoints) {
+        		return _.get(endpoints, path);
+        	});        
     }
 }
 

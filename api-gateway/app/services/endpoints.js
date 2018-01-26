@@ -10,7 +10,7 @@ const Promise = require('promise');
 
 const discoverServices = function(app) {
 
-  const _discard_endpoints = ["self", "profile"];
+  const _discard_endpoints = ["self", "profile", "first", "next", "last"];
   const _services = app.services.services;
 
   let _clientServices = undefined;
@@ -52,20 +52,18 @@ const discoverServices = function(app) {
 
             Object.keys(body._links).forEach(function(rel) {
               if(_discard_endpoints.indexOf(rel) == -1) {
+
                 endPointLinks[rel] = {href: body._links[rel].href};
 
                 if(body._links[rel].templated) {
-                  let params = body._links[rel].href.split("{\?")[1].replace("}", "").split(",");
-                  endPointLinks[rel].params = params;
+                  endPointLinks[rel].params = body._links[rel].href.split("{\?")[1].replace("}", "").split(",");
                   endPointLinks[rel].href = endPointLinks[rel].href.split("{\?")[0];
                 }
 
-                if(!body._links[rel].templated) {
-                  const params = {};
-                  if (params.indexOf("sort") != -1) {
-                    params = {sort: 1};
-                  }
-                  promisesList.push(addRoutes({version: endPointObj.version, rel: rel, url: body._links[rel].href, params: params}));
+                if (endPointLinks[rel].params && endPointLinks[rel].params.indexOf("size") != -1) {
+                  promisesList.push(addRoutes({version: endPointObj.version, rel: rel, url: endPointLinks[rel].href, params: {size: 1}}));
+                } else if(!body._links[rel].templated) {
+                  promisesList.push(addRoutes({version: endPointObj.version, rel: rel, url: endPointLinks[rel].href}));
                 }
               }
             });

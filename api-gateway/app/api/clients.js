@@ -6,8 +6,8 @@
 'use strict'
 
 const _ = require('lodash');
-const request = require('request').defaults({json: true});    
 const Promise = require('promise');
+const request = require('request').defaults({json: true});
 
 const api = function(app) {
 
@@ -27,19 +27,21 @@ const api = function(app) {
 
         return new Promise(function(resolve, reject) {
 
-            const clientListUrl = linkHelper.getLink(CLIENTS_URL_PATH);
-            if (!clientListUrl) {
-                reject("Service not Available");
-            }
-
-            request({url: clientListUrl}, function(err, resp, body) {
-                if(err) {
-                    console.log(err);
-                    reject(err);                  
-                } else {
-                	resolve(responseHelper.handle(resp, body));
+            linkHelper.getLink(CLIENTS_URL_PATH).then(function(clientListUrl) {
+                if (!clientListUrl) {
+                    reject("Service not Available");
                 }
+
+                request({url: clientListUrl}, function(err, resp, body) {
+                    if(err) {
+                        console.log(err);
+                        reject(err);                  
+                    } else {
+                        resolve(responseHelper.handle(resp, body));
+                    }
+                });            
             });
+
         });
     }
 
@@ -47,20 +49,23 @@ const api = function(app) {
 
         return new Promise(function(resolve, reject) {
 
-            const clientFindUrl = linkHelper.getLink(CLIENTS_URL_PATH);
-            if (!clientFindUrl) {
-                reject("Service not Available");
-            }
-
-            request({url: clientFindUrl+"/"+id}, function(err, resp, body) {
-                if(err) {
-                    console.log(err);
-                    reject(err);                  
-                } else {
-                    resolve(responseHelper.handle(resp, body));
+            linkHelper.getLink(CLIENTS_URL_PATH).then(function(clientFindUrl) {
+                if (!clientFindUrl) {
+                    reject("Service not Available");
                 }
+
+                request({url: clientFindUrl+"/"+id}, function(err, resp, body) {
+                    if(err) {
+                        console.log(err);
+                        reject(err);                  
+                    } else {
+                        resolve(responseHelper.handle(resp, body));
+                    }
+                });
             });
+
         });
+
     }
 
     function _search(query) {
@@ -69,37 +74,40 @@ const api = function(app) {
 
             if (_.isEmpty(query)) {
                 resolve({statusCode: 400, content: "Query params can not be empty!"});
-            }
+            }            
             
-            
-            const clientSearch = linkHelper.getLink(CLIENTS_URL_PATH);
-            if (!clientSearch) {
-                reject("Service not Available");
-            }
+            linkHelper.getLink(CLIENTS_SEARCH_PATH).then(function(clientSearch) {
 
-            let clientSearchUrl = {};
-            //Resolve witch search endpoint to use
-            _.forEach(clientSearch, function(fields, rel) {
-
-                if (_.keys(query).length == fields.params.length &&
-                    _.difference(fields.params, _.keys(query)).length == 0 ) {
-                    clientSearchUrl = clientSearch[rel].href;
+                if (!clientSearch) {
+                    reject("Service not Available");
                 }
+
+                let clientSearchUrl = {};
+                //Resolve witch search endpoint to use
+                _.forEach(clientSearch, function(fields, rel) {
+
+                    if (_.keys(query).length == fields.params.length &&
+                        _.difference(fields.params, _.keys(query)).length == 0 ) {
+                        clientSearchUrl = clientSearch[rel].href;
+                    }
+                });
+
+                if (_.isEmpty(clientSearchUrl)) {
+                    resolve({statusCode: 400, content: "Invalid query params!"});
+                }
+
+                request({url: clientSearchUrl, qs: query}, function(err, resp, body) {
+                    if(err) {
+                        console.log(err);
+                        reject(err);
+                    } else {
+                        resolve(responseHelper.handle(resp, body));
+                    }
+                });
             });
 
-            if (_.isEmpty(clientSearchUrl)) {
-                resolve({statusCode: 400, content: "Invalid query params!"});
-            }
-
-            request({url: clientSearchUrl, qs: query}, function(err, resp, body) {
-                if(err) {
-                    console.log(err);
-                    reject(err);
-                } else {
-                    resolve(responseHelper.handle(resp, body));
-                }
-            });
         });
+
     }
 
 }
