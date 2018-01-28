@@ -1,40 +1,100 @@
-[
-    {
-        "clientId": "3302ff1a-4178-4523-b8db-645b66078d36",
-        "restaurantId": "5507ff1a-4178-4523-b8db-645b66078d36",
-        "createdAt": "2018-01-24",
-        "confirmedAt":	"2018-01-24",
-        "items": [
-            {
-                "description": "Smith Furioso",
-                "quantity": "2",
-                "price": "60.50"
-            },
-            {
-                "description": "Potatos",
-                "quantity": "2",
-                "price": "25.70"
-            }
-        ]
-            
-    },
-    {
-        "clientId": "d6182647-5cbb-4e4d-ab54-2168bf55aa7b",
-        "restaurantId": "9857ff1a-4178-4523-b8db-645b66078d36",
-        "createdAt": "2018-01-23",
-        "confirmedAt":	"2018-01-23",
-        "items": [
-            {
-                "description": "Smith Furioso",
-                "quantity": "2",
-                "price": "60.50"
-            },
-            {
-                "description": "Potatos",
-                "quantity": "2",
-                "price": "25.70"
-            }
-        ]
-            
-    }
-]
+{
+    "clientId": "d6182647-5cbb-4e4d-ab54-2168bf55aa7b",
+    "restaurantId": "9857ff1a-4178-4523-b8db-645b66078d36",
+    "createdAt": "2018-01-23T12:00:00.000-200",
+    "confirmedAt":  "2018-01-23TT12:00:00.000-200",
+    "items": [
+        {
+            "description": "Smith Furioso",
+            "quantity": "2",
+            "price": "60.50"
+        },
+        {
+            "description": "Potatos",
+            "quantity": "2",
+            "price": "25.70"
+        }
+    ]
+        
+}
+
+{
+    "clientId": "c2ae3035-1bfd-4692-a621-21766b30e249",
+    "restaurantId": "9857ff1a-4178-4523-b8db-645b66078d36",
+    "createdAt": "2018-01-24",
+    "confirmedAt":  "2018-01-24",
+    "items": [
+        {
+            "description": "Pizza do Fausto",
+            "quantity": "1",
+            "price": "60.50"
+        },
+        {
+            "description": "Suco",
+            "quantity": "2",
+            "price": "25.70"
+        }
+    ]
+        
+}
+
+
+{
+    "clientId": "c090e4dd-24ca-44ea-bb51-2aaa33ed5a3b",
+    "restaurantId": "9857ff1a-4141-4545-b8db-645b66078d55",
+    "createdAt": "2018-01-25",
+    "confirmedAt":  "2018-01-25",
+    "items": [
+        {
+            "description": "Mamadeira",
+            "quantity": "1",
+            "price": "15.7"
+        },
+        {
+            "description": "Papá",
+            "quantity": "2",
+            "price": "18.30"
+        }
+    ]
+        
+}
+
+{
+    "clientId": "c090e4dd-24ca-44ea-bb51-2aaa33ed5a3b",
+    "restaurantId": "9857ff1a-4141-4545-b8db-645b66078d55",
+    "createdAt": "2018-01-27",
+    "confirmedAt":  "2018-01-27",
+    "items": [
+        {
+            "description": "Pão",
+            "quantity": "1",
+            "price": "5.5"
+        },
+        {
+            "description": "Água",
+            "quantity": "2",
+            "price": "18.30"
+        }
+    ]
+        
+}
+
+{
+    "clientId": "79c7b276-96af-42b1-bc06-ed361038f5e3",
+    "restaurantId": "9857ff1a-4544-4855-b8db-645b66078d55",
+    "createdAt": "2018-01-28",
+    "confirmedAt":  "2018-01-28",
+    "items": [
+        {
+            "description": "Hamburguer Cordeiro",
+            "quantity": "1",
+            "price": "40.5"
+        },
+        {
+            "description": "Petty Gateau",
+            "quantity": "1",
+            "price": "15.30"
+        }
+    ]
+        
+}

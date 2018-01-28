@@ -73,13 +73,15 @@ const api = function(app) {
         return new Promise(function(resolve, reject) {
 
             if (_.isEmpty(query)) {
-                return resolve({statusCode: 400, content: "Query params can not be empty!"});
-            }            
+                resolve({statusCode: 400, content: "Query params can not be empty!"});
+                return;
+            }
             
             linkHelper.getLink(CLIENTS_SEARCH_PATH).then(function(clientSearch) {
 
                 if (!clientSearch) {
-                    return reject("Service not Available");
+                    reject("Service not Available");
+                    return;
                 }
 
                 let clientSearchUrl = {};
@@ -93,15 +95,16 @@ const api = function(app) {
                 });
 
                 if (_.isEmpty(clientSearchUrl)) {
-                    return resolve({statusCode: 400, content: "Invalid query params!"});
+                    resolve({statusCode: 400, content: "Invalid query params!"});
+                    return;
                 }
 
                 request({url: clientSearchUrl, qs: query}, function(err, resp, body) {
                     if(err) {
                         console.log(err);
-                        return reject(err);
+                        reject("Service not Available");
                     } else {
-                        return resolve(responseHelper.handle(resp, body));
+                        resolve(responseHelper.handle(resp, body));
                     }
                 });
             });

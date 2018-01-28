@@ -8,6 +8,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 public interface OrderRepository extends PagingAndSortingRepository<Order, UUID> {
 
@@ -18,9 +19,9 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, UUID>
 	Collection<Order> findByRestaurantId(@Param("restaurantId") UUID restaurantId);
 	
 	@RestResource(path = "byDate", rel = "byDate")
-	Collection<Order> findByCreatedAtBetween(@Param("start") @DateTimeFormat(pattern="yyyy-MM-dd") Date start, @Param("end") @DateTimeFormat(pattern="yyyy-MM-dd") Date end);
+	Collection<Order> findByCreatedAtBetween(@Param("start") @DateTimeFormat(iso=ISO.DATE) Date start, @Param("end") @DateTimeFormat(iso=ISO.DATE) Date end);
 	
 	@RestResource(path = "byClientIdAndDate", rel = "byClientIdAndDate")
-	Collection<Order> findByClientIdAndCreatedAtBetween(@Param("clientId") UUID clientId, @Param("start") @DateTimeFormat(pattern="yyyy-MM-dd") Date start, @Param("end") @DateTimeFormat(pattern="yyyy-MM-dd") Date end);
+	Collection<Order> findByClientIdAndCreatedAtBetween(@Param("clientId") UUID clientId, @Param("start") @DateTimeFormat(iso=ISO.DATE) Date start, @Param("end") @DateTimeFormat(iso=ISO.DATE) Date end);
 	
 }

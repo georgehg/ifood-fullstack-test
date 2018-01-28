@@ -72,16 +72,18 @@ const api = function(app) {
     function _search(query) {
 
         return new Promise(function(resolve, reject) {
-
+            
             if (_.isEmpty(query)) {
-                return resolve({statusCode: 400, content: "Query params can not be empty!"});
-            }            
+                resolve({statusCode: 400, content: "Query params can not be empty!"});
+                return;
+            };
             
             linkHelper.getLink(ORDERS_SEARCH_PATH).then(function(orderSearch) {
 
                 if (!orderSearch) {
-                    return reject("Service not Available");
-                }
+                    reject("Service not Available");
+                    return;
+                };
 
                 let orderSearchUrl = {};
                 //Resolve witch search endpoint to use
@@ -94,15 +96,16 @@ const api = function(app) {
                 });
 
                 if (_.isEmpty(orderSearchUrl)) {
-                    return resolve({statusCode: 400, content: "Invalid query params!"});
-                }
+                    resolve({statusCode: 400, content: "Invalid query params!"});
+                    return;
+                };
 
                 request({url: orderSearchUrl, qs: query}, function(err, resp, body) {
                     if(err) {
                         console.log(err);
-                        return reject(err);
+                        reject("Service not Available");
                     } else {
-                        return resolve(responseHelper.handle(resp, body));
+                        resolve(responseHelper.handle(resp, body));
                     }
                 });
             });

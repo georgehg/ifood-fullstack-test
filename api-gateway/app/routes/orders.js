@@ -40,29 +40,38 @@ const routes = function(app) {
         	return;
         }
 
+        let searchResult = {};
+
 		clientApi.search(clientQuery)
 			.then(function(response) {
 
-				let clients = response.content.clients;
-				clients.forEach(function(client) {
-					orderQuery.clientId = client._links.self.href.split('clients/')[1];
-					orderApi.search(orderQuery).then
+				let promisesList = [];
+				searchResult = response.content.clients;
+				_.forEach(searchResult, function(client, index) {
+					let query = {}
+					_.assign(query, orderQuery);
+					query.clientId = _.last(client._links.self.href.split('/'));
+					promisesList.push(searchClientOrders(index, query));
 				});
 
-
-				//res.status(response.statusCode).json(response.content);
-
+				Promise.all(promisesList)
+			    	.then(function(status) {
+			    		res.status(200).json(searchResult);
+				      }).catch(function(reason) {
+				      	console.log("error: ", reason);
+				        res.status(500).send(reason);
+					});
 
 			}).catch(function(reason) {
 				res.status(500).send(reason);
 			});
-		
-		/*orderApi.search(req.query)
-			.then(function(response) {
-				res.status(response.statusCode).json(response.content);
-			}).catch(function(reason) {
-				res.status(500).send(reason);
-			});*/
+
+		function searchClientOrders(index, query) {
+			return orderApi.search(query)
+				.then(function(response) {
+					searchResult[index].orders = response.content.orders;
+				});
+		};
 
 	});	
 
