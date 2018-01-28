@@ -4,10 +4,12 @@ import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
@@ -28,6 +30,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -42,7 +46,7 @@ import com.ifood.demo.client.ClientRepository;
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = ClientApplication.class)
-public class ClientRestDataTests {
+public class ClientRestDataIntegrationTests {
 
 	private MockMvc mockMvc;
 
@@ -65,6 +69,19 @@ public class ClientRestDataTests {
 
 		assertNotNull("the JSON message converter must not be null", this.mappingJackson2HttpMessageConverter);
 
+	}
+	
+	@Before
+	public void setup() throws Exception {
+
+		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
+									.alwaysDo(MockMvcResultHandlers.print())
+									.build();
+	}
+	
+	@After
+	public void truncateTable() {
+		clientRepository.deleteAll();
 	}
 
 	private String json(Object o) throws IOException {
@@ -105,24 +122,13 @@ public class ClientRestDataTests {
 		return searchUrl;
 	}
 
-	@Before
-	public void setup() throws Exception {
-
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).alwaysDo(MockMvcResultHandlers.print()).build();
-	}
-	
-	@After
-	public void truncateTable() {
-		clientRepository.deleteAll();
-	}
-
 	@Test
 	public void contextLoadsTest() {}
 
 	@Test
 	public void hateoasApiTest() throws Exception {
 		
-		String apiContent = this.mockMvc.perform(get("/v1/").contextPath("/v1"))
+		String apiContent = this.mockMvc.perform(get("/v1").contextPath("/v1"))
 							.andExpect(status().isOk())
 							.andExpect(jsonPath("_links", hasKey("clients")))
 							.andExpect(jsonPath("_links.clients.href", is("http://localhost/v1/clients{?page,size,sort}")))
@@ -162,7 +168,7 @@ public class ClientRestDataTests {
 
 		Client newClient = new Client("João da Silva", "joao@silva.com", "12345678");
 		
-		String apiContent = this.mockMvc.perform(get("/v1/").contextPath("/v1"))
+		String apiContent = this.mockMvc.perform(get("/v1").contextPath("/v1"))
 							.andReturn().getResponse().getContentAsString();
 		
 		String clientsUrl = jsonPathValue(apiContent, "_links.clients.href")

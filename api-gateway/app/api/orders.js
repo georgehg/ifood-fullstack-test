@@ -29,15 +29,15 @@ const api = function(app) {
 
             linkHelper.getLink(ORDERS_URL_PATH).then(function(orderListUrl) {
                 if (!orderListUrl) {
-                    reject("Service not Available");
+                    return reject("Service not Available");
                 }
 
                 request({url: orderListUrl}, function(err, resp, body) {
                     if(err) {
                         console.log(err);
-                        reject(err);                  
+                        return reject(err);                  
                     } else {
-                        resolve(responseHelper.handle(resp, body));
+                        return resolve(responseHelper.handle(resp, body));
                     }
                 });            
             });
@@ -52,15 +52,15 @@ const api = function(app) {
 
             linkHelper.getLink(ORDERS_URL_PATH).then(function(orderFindUrl) {
                 if (!orderFindUrl) {
-                    reject("Service not Available");
+                    return reject("Service not Available");
                 }
 
                 request({url: orderFindUrl+"/"+id}, function(err, resp, body) {
                     if(err) {
                         console.log(err);
-                        reject(err);                  
+                        return reject(err);                  
                     } else {
-                        resolve(responseHelper.handle(resp, body));
+                        return resolve(responseHelper.handle(resp, body));
                     }
                 });
             });
@@ -74,13 +74,13 @@ const api = function(app) {
         return new Promise(function(resolve, reject) {
 
             if (_.isEmpty(query)) {
-                resolve({statusCode: 400, content: "Query params can not be empty!"});
+                return resolve({statusCode: 400, content: "Query params can not be empty!"});
             }            
             
             linkHelper.getLink(ORDERS_SEARCH_PATH).then(function(orderSearch) {
 
                 if (!orderSearch) {
-                    reject("Service not Available");
+                    return reject("Service not Available");
                 }
 
                 let orderSearchUrl = {};
@@ -94,15 +94,15 @@ const api = function(app) {
                 });
 
                 if (_.isEmpty(orderSearchUrl)) {
-                    resolve({statusCode: 400, content: "Invalid query params!"});
+                    return resolve({statusCode: 400, content: "Invalid query params!"});
                 }
 
                 request({url: orderSearchUrl, qs: query}, function(err, resp, body) {
                     if(err) {
                         console.log(err);
-                        reject(err);
+                        return reject(err);
                     } else {
-                        resolve(responseHelper.handle(resp, body));
+                        return resolve(responseHelper.handle(resp, body));
                     }
                 });
             });
