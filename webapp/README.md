@@ -14,11 +14,18 @@ npm install
 
 ## Configuration
 
-The server port is defaulted to 7200, but it can be changed creating an environment variable named `PORT` with another port number.
+The server port is defaulted to 7200, but it can be changed creating an environment variable named `WEB_PORT` with another port number.
+
+Two environment variables can be created to configure the API Gateway address:
+
+- To configure API Gateway host address create variable GTW_HOST
+- To configure API Gateway port number create variable GTW_PORT
+
+If this two variables is are not created at server startup, the API Gateway address will be defaulted to `localhost:5200`
 
 ## Running
 
-After successfully installation, you can startup the application using npm or other tools, like [forever](https://github.com/foreverjs/forever) for example, using the file ./src/server/server.js.
+After successfully installation, you can startup the application using npm or other tools, like [forever](https://github.com/foreverjs/forever) for example, using the file [server.js](./src/server/server.js).
 
 - Using npm
 
@@ -26,8 +33,8 @@ After successfully installation, you can startup the application using npm or ot
 npm start
 ```
 
-The application can now be accessed by server address followd by the port number:
+The webapp can now be accessed by server address followed by the port number:
 
 ```js
-http://localhost:7200
+http://localhost:5200
 ```

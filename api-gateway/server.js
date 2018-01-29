@@ -7,7 +7,7 @@
 
 const app = require('./app/config/express.js');
 
-const port = process.env.PORT || 5200;
+const port = process.env.GTW_PORT || 5200;
 
 app.listen(port, function() {
 	console.log("Server up and running on Port " + port);

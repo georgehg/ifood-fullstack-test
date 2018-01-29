@@ -8,13 +8,14 @@
 angular
  	.module('app', ['ngResource', 'ui.bootstrap'])
  	.provider('environment', environment) 
-	.config(resourceConfig);
+    .config(appConfig)
+    .run(appRun);
 
     function environment() {
 
         var environments = {};
             
-        var selectedEnv = 'dev';
+        var selectedEnv = 'local';
         var self = this;
 
         this.setEnvironments = function (envs) {
@@ -56,11 +57,11 @@ angular
         }];
     };
 
-    function resourceConfig(environmentProvider) {
+    function appConfig(environmentProvider, ) {
 
         //This even allows you to change environment in runtime.
-        environmentProvider.setEnvironments({            
-            dev: {
+        environmentProvider.setEnvironments({
+            local: {
                 root: 'http://localhost',
                 api: '/api',
                 version: 'v1',
@@ -74,4 +75,30 @@ angular
             }
         });
         
+    };
+
+    function appRun(apiResource, environment) {
+        apiResource.get(function(api) {
+
+            console.log(api);
+
+            environment.setEnvironments({
+                local: {
+                    root: 'http://localhost',
+                    api: '/api',
+                    version: 'v1',
+                    port: 3000
+                },
+                prod: {
+                    root: 'http://' + api.host,
+                    api: '/api',
+                    version: 'v1',
+                    port: api.port
+                }
+                
+            });
+
+            environment.setActive('prod');
+            
+        });
     };

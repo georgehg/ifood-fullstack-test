@@ -12,7 +12,9 @@ const app = express();
 app.disable('etag').disable('x-powered-by');
 
 var environment = process.env.NODE_ENV;
-var port = process.env.PORT || 7200;
+var web_port = process.env.WEB_PORT || 7200;
+var gtw_host = process.env.GTW_HOST || 'localhost';
+var gtw_port = process.env.GTW_PORT || 5200;
 
 switch (environment){
     case 'PROD':
@@ -28,8 +30,13 @@ switch (environment){
 app.use('/', express.static('./src/client'));
 app.use('/bower_components', express.static('./bower_components'));
 
-http.createServer(app).listen(port, function() {
-    console.log('Express server listening on port ' + port);
+// Return API Gateway address
+app.get('/api', function(req, res) {
+    res.json({host: gtw_host, port: gtw_port});
+});
+
+http.createServer(app).listen(web_port, function() {
+    console.log('Express server listening on port ' + web_port);
     console.log('env = ' + app.get('env') +
     '\n__dirname = ' + __dirname  +
     '\nprocess.cwd = ' + process.cwd());
