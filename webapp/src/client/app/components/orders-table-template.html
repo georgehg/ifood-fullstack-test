@@ -1,0 +1,29 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12" style="height: 100%">
+		<div class="panel panel-default">
+		  <div class="panel-body">
+				<table class="table table-striped table-hover" style="text-align: center">
+					<head>
+						<tr class="success">
+							<th style="text-align: center">Date</th>
+							<th style="text-align: center">Client Name</th>
+							<th style="text-align: center">Phone</th>
+							<th style="text-align: center">E-mail</th>
+							<th style="text-align: center">Total Value</th>
+						</tr>
+					</head>
+					<body>
+						<tr ng-repeat="order in vm.ordersData track by $index"
+							ng-click="vm.showDetail(vm.ordersData[$index])">
+							<td>{{ :: order.date | date: 'dd/MM'}}</td>
+							<td>{{ :: order.name}}</td>
+							<td>{{ :: order.phone}}</td>
+							<td>{{ :: order.email}}</td>
+							<td>{{ :: order.total | currency}}</td>
+						</tr>
+					</body>
+				</table>
+		  </div>
+		</div>
+	</div>
+</div>

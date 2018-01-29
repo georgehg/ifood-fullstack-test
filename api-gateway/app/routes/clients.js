@@ -7,11 +7,13 @@
 
 const routes = function(app) {
 
-	const clientApi = app.api.clients;
+	const _apiBasePath = app.config.gateway.base_path;
+	const _apiVersion = app.config.gateway.api_version;
+	const _clientApi = app.api.clients;
 
-	app.get('/clients', function(req, res) {
+	app.get(_apiBasePath + '/' + _apiVersion + '/clients', function(req, res) {
 
-		clientApi.list()
+		_clientApi.list()
 			.then(function(response) {
 				res.status(response.statusCode).json(response.content);
 			}).catch(function(reason) {
@@ -20,9 +22,9 @@ const routes = function(app) {
 		
 	});
 
-	app.get('/clients/search', function(req, res) {
+	app.get(_apiBasePath + '/' + _apiVersion + '/clients/search', function(req, res) {
 
-		clientApi.search(req.query)
+		_clientApi.search(req.query)
 			.then(function(response) {
 				res.status(response.statusCode).json(response.content);
 			}).catch(function(reason) {
@@ -31,9 +33,9 @@ const routes = function(app) {
 		
 	});
 
-	app.get('/clients/:id', function(req, res) {
+	app.get(_apiBasePath + '/' + _apiVersion + '/clients/:id', function(req, res) {
 
-		clientApi.find(req.params.id)
+		_clientApi.find(req.params.id)
 			.then(function(response) {
 				res.status(response.statusCode).json(response.content);
 			}).catch(function(reason) {

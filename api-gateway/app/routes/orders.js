@@ -9,12 +9,15 @@ const _ = require('lodash');
 
 const routes = function(app) {
 
-	const clientApi = app.api.clients;
-	const orderApi = app.api.orders;
+	const _apiBasePath = app.config.gateway.base_path;
+	const _apiVersion = app.config.gateway.api_version;
 
-	app.get('/orders', function(req, res) {
+	const _clientApi = app.api.clients;
+	const _orderApi = app.api.orders;
 
-		orderApi.list()
+	app.get(_apiBasePath + '/' + _apiVersion + '/orders', function(req, res) {
+
+		_orderApi.list()
 			.then(function(response) {
 				res.status(response.statusCode).json(response.content);
 			}).catch(function(reason) {
@@ -23,7 +26,7 @@ const routes = function(app) {
 		
 	});
 
-	app.get('/orders/search', function(req, res) {
+	app.get(_apiBasePath + '/' + _apiVersion + '/orders/search', function(req, res) {
 
 		const orderQueryKeys = ['start', 'end'];
 		let orderQuery = _.pick(req.query, orderQueryKeys);
@@ -42,7 +45,7 @@ const routes = function(app) {
 
         let searchResult = {};
 
-		clientApi.search(clientQuery)
+		_clientApi.search(clientQuery)
 			.then(function(response) {
 
 				let promisesList = [];
@@ -67,7 +70,7 @@ const routes = function(app) {
 			});
 
 		function searchClientOrders(index, query) {
-			return orderApi.search(query)
+			return _orderApi.search(query)
 				.then(function(response) {
 					searchResult[index].orders = response.content.orders;
 				});
@@ -75,9 +78,9 @@ const routes = function(app) {
 
 	});	
 
-	app.get('/orders/:id', function(req, res) {
+	app.get(_apiBasePath + '/' + _apiVersion + '/orders/:id', function(req, res) {
 
-		orderApi.find(req.params.id)
+		_orderApi.find(req.params.id)
 			.then(function(response) {
 				res.status(response.statusCode).json(response.content);
 			}).catch(function(reason) {

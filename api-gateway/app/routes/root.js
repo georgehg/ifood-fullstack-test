@@ -7,8 +7,8 @@
 
 const routes = function(app) {
 
-	app.get('/', function(req, res) {
-		res.json({info: "Hello Root"});
+	app.get('/api/v1', function(req, res) {
+		res.json({_links: '/api/v1/orders/search'});
 
 	});
 

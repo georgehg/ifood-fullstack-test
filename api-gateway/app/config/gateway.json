@@ -1,0 +1,20 @@
+{
+    "base_path": "/api",
+    "api_version": "v1",    
+    "services": {
+        "v1": {
+            "client_service": {
+                "version": "v1",
+                "basePath": "/v1",        
+                "host": "localhost",
+                "port": "8081"            
+            },
+            "order_service": {
+                "version": "v1",
+                "basePath": "/v1",        
+                "host": "localhost",
+                "port": "8082"
+            }
+        }
+    }
+}

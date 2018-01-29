@@ -11,7 +11,7 @@ const Promise = require('promise');
 const discoverServices = function(app) {
 
   const _discard_endpoints = ["self", "profile", "first", "next", "last"];
-  const _services = app.services.services;
+  const _services =  app.config.gateway.services;
 
   let _clientServices = undefined;
 

@@ -1,0 +1,63 @@
+<div class="modal-content">
+    <div class="modal-header bg-info" style="text-align: center">
+        <span><b>Order Details</b></span>
+        <button type="button" class="pull-right" ng-click="vm.modalInstance.dismiss()" aria-label="Close">
+            <em class="ion-ios-close-empty"></em>
+        </button>        
+    </div>
+    <div class="modal-body">
+
+        <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <form class="form-inline">
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">                    
+                        <label class="control-label">Client Name:</label>
+                        <p class="form-control-static">{{ :: vm.order.name}}</p>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">                    
+                        <label class="control-label">Phone:</label>
+                        <p class="form-control-static">{{ :: vm.order.phone}}</p>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">                    
+                        <label class="control-label">E-mail:</label>
+                        <p class="form-control-static">{{ :: vm.order.email}}</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+        </div>
+
+        <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="panel panel-default">
+		    <div class="panel-body">
+                <table class="table table-striped table-borderd" style="text-align: center">
+                    <head>
+                        <tr class="success">
+                            <th style="text-align: center">Description</th>
+                            <th style="text-align: center">Quantity</th>
+                            <th style="text-align: center">Unity Price</th>
+                            <th style="text-align: center">Total</th>
+                        </tr>
+                    </head>
+                    <body>
+                        <tr ng-repeat="detail in vm.details track by $index">
+                            <td>{{ :: detail.description}}</td>
+                            <td>{{ :: detail.quantity}}</td>
+                            <td>{{ :: detail.price | currency}}</td>
+                            <td>{{ :: detail.quantity * detail.price | currency}}</td>
+                        </tr>
+                    </body>
+                </table>
+            </div>
+            </div>
+        </div>
+        </div>
+
+    </div>
+</div>

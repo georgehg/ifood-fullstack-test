@@ -10,10 +10,10 @@
 
   <link rel="icon" href="assets/img/favicon.ico">
 
+  <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.css" />
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
   <link rel="stylesheet" href="bower_components/angular-toastr/dist/angular-toastr.min.css">
-  <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.min.css"></script>
 
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -21,17 +21,21 @@
   <script src="bower_components/angular-resource/angular-resource.min.js"></script>
   <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
   <script src="bower_components/angular-toastr/dist/angular-toastr.min.js"></script>
-  <script src="bower_components/angular-ui-grid/ui-grid.min.js"></script>
+
+  <link rel="stylesheet" href="assets/css/spinner.css" />
 
   <script src="app/app.module.js"></script>
   <script src="app/order-search.resource.js"></script>
   <script src="app/directives/custom-date-picker.js"></script>
-  <script src="app/components/search-panel.component.js"></script>
+  <script src="app/components/search-page.component.js"></script>
+  <script src="app/components/orders-table.component.js"></script>
+  <script src="app/components/order-details-modal.component.js"></script>
 
 </head>
 <body>
 
   <div class="container-fluid">
+
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-12">
         <h1 style="font-family: 'Roboto', sans-serif;">
@@ -40,9 +44,7 @@
       </div>
     </div>
 
-    <search-panel></search-panel>
-
-    <orders-grid></orders-grid>
+    <search-page></search-page>
 
   </div>
 

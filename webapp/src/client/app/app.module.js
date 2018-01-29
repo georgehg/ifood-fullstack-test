@@ -6,20 +6,13 @@
 'use strict';
 
 angular
- 	.module('app', ['ngResource', 'toastr', 'ui.bootstrap', 'ui.grid'])
+ 	.module('app', ['ngResource', 'ui.bootstrap'])
  	.provider('environment', environment) 
 	.config(resourceConfig);
 
     function environment() {
 
-        var environments = {
-            dev: {
-                root: 'http://localhost',
-                api: '/api',
-                version: 'v1',
-                port: 3000
-            }
-        };
+        var environments = {};
             
         var selectedEnv = 'dev';
         var self = this;
@@ -66,23 +59,19 @@ angular
     function resourceConfig(environmentProvider) {
 
         //This even allows you to change environment in runtime.
-        environmentProvider.setEnvironments({
+        environmentProvider.setEnvironments({            
             dev: {
                 root: 'http://localhost',
-                api: '/sga/server/api'
-            },
-            localonly: {
-                root: 'http://localhost',
-                api: '/sga/server/api',
-                version: 'v1'
+                api: '/api',
+                version: 'v1',
+                port: 3000
             },
             prod: {
-                root: 'http://10.125.170.52',
-                api: '/sga/server/api',
-                version: 'v1'
+                root: 'http://localhost',
+                api: '/api',
+                version: 'v1',
+                port: 3000
             }
         });
-
-    //Set prod as the active schema
-    //environmentProvider.setActive('dev');
+        
     };

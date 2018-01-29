@@ -37,19 +37,23 @@
 	        <div class="col-xs-12 col-sm-2 col-md-2">
 	          <div class="form-group">
 	              <label for="clientPhone">Phone</label>
-	              <input type="number" class="form-control" id="clientPhone" name="clientPhone" ng-model="vm.clientPhone">
+	              <input type="text" class="form-control" id="clientPhone" name="clientPhone" ng-model="vm.clientPhone">
 	          </div>
 	        </div>
 
 	        <div class="col-xs-12 col-sm-2 col-md-2">
 	          <div class="form-group">
 	              <label for="clientEmail">E-mail</label>
-	              <input type="email" class="form-control" id="clientEmail" name="clientEmail" ng-model="vm.clientEmail">
+	              <input type="text" class="form-control" id="clientEmail" name="clientEmail" ng-model="vm.clientEmail">
 	          </div>
 	        </div>
 
 	        <div class="col-xs-12 col-sm-12 col-md-12" style="text-align: center;">
-	          <button class="btn btn-default" ng-click="vm.doSearch()">Search</button>
+						<button class="btn btn-default"
+							ng-click="vm.doSearch()"
+							ng-disabled="searchForm.$invalid || (!vm.clientName && !vm.clientPhone && !vm.clientEmail)">
+							Search
+						</button>
 	        </div>
 
 	      </form>
@@ -57,3 +61,10 @@
 	  </div>
 	</div>
 </div>
+
+<div uib-alert class="alert-warning" ng-if="vm.noOrdersFound">No orders Found. Please, make your search again with other values.</div>
+<div uib-alert class="alert-danger" ng-if="vm.errorsFound">Ops! Sorry, your search could not be completed due to some errors.</div>
+
+<div class="loader center-block" ng-if="vm.loading"></div>
+
+<orders-table orders-data='vm.ordersData' ng-if="vm.ordersData.length > 0"></orders-table>

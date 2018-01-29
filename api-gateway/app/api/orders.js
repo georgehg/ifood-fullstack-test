@@ -11,8 +11,10 @@ const request = require('request').defaults({json: true});
 
 const api = function(app) {
 
-    const ORDERS_URL_PATH = 'v1.order_service.orders.href';
-    const ORDERS_SEARCH_PATH = 'v1.order_service.orders.links.search.links';
+    const _apiVersion = app.config.gateway.api_version;
+
+    const ORDERS_URL_PATH =  _apiVersion + '.order_service.orders.href';
+    const ORDERS_SEARCH_PATH =  _apiVersion + '.order_service.orders.links.search.links';
 
     const responseHelper = app.helpers.responses;
     const linkHelper = app.helpers.links;

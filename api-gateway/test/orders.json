@@ -1,8 +1,8 @@
-{
-    "clientId": "d6182647-5cbb-4e4d-ab54-2168bf55aa7b",
+﻿{
+    "clientId": "6cd491f1-29d5-4a5d-828a-b9d7a9a0a38b",
     "restaurantId": "9857ff1a-4178-4523-b8db-645b66078d36",
-    "createdAt": "2018-01-23T12:00:00.000-200",
-    "confirmedAt":  "2018-01-23TT12:00:00.000-200",
+    "createdAt": "2018-01-23T12:00:00.000-0200",
+    "confirmedAt":  "2018-01-23T12:00:00.000-0200",
     "items": [
         {
             "description": "Smith Furioso",
@@ -19,10 +19,10 @@
 }
 
 {
-    "clientId": "c2ae3035-1bfd-4692-a621-21766b30e249",
+    "clientId": "6cd491f1-29d5-4a5d-828a-b9d7a9a0a38b",
     "restaurantId": "9857ff1a-4178-4523-b8db-645b66078d36",
-    "createdAt": "2018-01-24",
-    "confirmedAt":  "2018-01-24",
+    "createdAt": "2018-01-24T12:00:00.000-0200",
+    "confirmedAt":  "2018-01-24T12:00:00.000-0200",
     "items": [
         {
             "description": "Pizza do Fausto",
@@ -40,18 +40,18 @@
 
 
 {
-    "clientId": "c090e4dd-24ca-44ea-bb51-2aaa33ed5a3b",
+    "clientId": "8ff71e51-7c51-4e4f-80a4-b0149b5660e3",
     "restaurantId": "9857ff1a-4141-4545-b8db-645b66078d55",
-    "createdAt": "2018-01-25",
-    "confirmedAt":  "2018-01-25",
+    "createdAt": "2018-01-25T12:00:00.000-0200",
+    "confirmedAt":  "2018-01-25T12:00:00.000-0200",
     "items": [
         {
-            "description": "Mamadeira",
+            "description": "Mc Lanche Feliz",
             "quantity": "1",
-            "price": "15.7"
+            "price": "25.7"
         },
         {
-            "description": "Papá",
+            "description": "Milk Shake",
             "quantity": "2",
             "price": "18.30"
         }
@@ -60,15 +60,15 @@
 }
 
 {
-    "clientId": "c090e4dd-24ca-44ea-bb51-2aaa33ed5a3b",
+    "clientId": "8ff71e51-7c51-4e4f-80a4-b0149b5660e3",
     "restaurantId": "9857ff1a-4141-4545-b8db-645b66078d55",
-    "createdAt": "2018-01-27",
-    "confirmedAt":  "2018-01-27",
+    "createdAt": "2018-01-27T12:00:00.000-0200",
+    "confirmedAt":  "2018-01-27T12:00:00.000-0200",
     "items": [
         {
-            "description": "Pão",
+            "description": "Mc Fish",
             "quantity": "1",
-            "price": "5.5"
+            "price": "15.5"
         },
         {
             "description": "Água",
@@ -80,10 +80,10 @@
 }
 
 {
-    "clientId": "79c7b276-96af-42b1-bc06-ed361038f5e3",
+    "clientId": "6df64c56-2807-4f01-a2ff-122895b60491",
     "restaurantId": "9857ff1a-4544-4855-b8db-645b66078d55",
-    "createdAt": "2018-01-28",
-    "confirmedAt":  "2018-01-28",
+    "createdAt": "2018-01-28T12:00:00.000-0200",
+    "confirmedAt":  "2018-01-28T12:00:00.000-0200",
     "items": [
         {
             "description": "Hamburguer Cordeiro",

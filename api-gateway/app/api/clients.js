@@ -11,8 +11,10 @@ const request = require('request').defaults({json: true});
 
 const api = function(app) {
 
-    const CLIENTS_URL_PATH = 'v1.client_service.clients.href';
-    const CLIENTS_SEARCH_PATH = 'v1.client_service.clients.links.search.links';
+    const _apiVersion = app.config.gateway.api_version;
+
+    const CLIENTS_URL_PATH = _apiVersion + '.client_service.clients.href';
+    const CLIENTS_SEARCH_PATH = _apiVersion + '.client_service.clients.links.search.links';
 
     const responseHelper = app.helpers.responses;
     const linkHelper = app.helpers.links;

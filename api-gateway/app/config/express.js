@@ -7,12 +7,14 @@
 
 const express = require('express');
 const consign = require('consign');
+var cors = require('cors');
 
 const app = express();
 app.disable('body-parser');
+app.use(cors());
 
 consign({cwd: 'app'})
-	.include('services/services.json')
+	.include('config/gateway.json')
 	.then('services')
 	.then('helpers')
 	.then('api')
