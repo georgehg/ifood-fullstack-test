@@ -6,7 +6,7 @@ Front web Application developed in AngularJS 1.6.
 
 In order to properly install and run this application you need to have [NodeJS](https://nodejs.org/en) and [bower](https://bower.io/) installed on your machine.
 
-Inside this directory, run npm install to download application dependencies.
+Inside this directory, run `npm install` to download application dependencies and install bower packages.
 
 ```js
 npm install
@@ -18,10 +18,16 @@ The server port is defaulted to 7200, but it can be changed creating an environm
 
 ## Running
 
-After successfully installation, you can startup the application using npm or other tools, like [forever](https://github.com/foreverjs/forever) for example, using the file ./src/server/server.js
+After successfully installation, you can startup the application using npm or other tools, like [forever](https://github.com/foreverjs/forever) for example, using the file ./src/server/server.js.
 
 - Using npm
 
 ```js
 npm start
+```
+
+The application can now be accessed by server address followd by the port number:
+
+```js
+http://localhost:7200
 ```
