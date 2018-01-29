@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app="app">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>iFood Test</title>
+
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900italic,900&subset=latin,greek,greek-ext,vietnamese,cyrillic-ext,latin-ext,cyrillic' rel='stylesheet' type='text/css'>
+
+  <link rel="icon" href="assets/img/favicon.ico">
+
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="bower_components/angular-toastr/dist/angular-toastr.min.css">
+  <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.min.css"></script>
+
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="bower_components/angular/angular.min.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.min.js"></script>
+  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+  <script src="bower_components/angular-toastr/dist/angular-toastr.min.js"></script>
+  <script src="bower_components/angular-ui-grid/ui-grid.min.js"></script>
+
+  <script src="app/app.module.js"></script>
+  <script src="app/order-search.resource.js"></script>
+  <script src="app/directives/custom-date-picker.js"></script>
+  <script src="app/components/search-panel.component.js"></script>
+
+</head>
+<body>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <h1 style="font-family: 'Roboto', sans-serif;">
+          Order List
+        </h1>
+      </div>
+    </div>
+
+    <search-panel></search-panel>
+
+    <orders-grid></orders-grid>
+
+  </div>
+
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12">
+	  <div class="panel panel-default">
+	    <div class="panel-body">
+
+	      <form name='searchForm' novalidate>
+
+	        <div class="col-xs-12 col-sm-2 col-md-2">
+	          <div class="form-group">
+	              <label for="startDate">Start Date</label>
+	              <ct-date-picker 
+	                ct-dtp-id="startDate" ct-dtp-name="startDate"
+	                ct-dtp-model="vm.startDate"
+	                ct-dtp-required="true">
+	              </ct-date-picker>
+	          </div>
+	        </div>
+
+	        <div class="col-xs-12 col-sm-2 col-md-2">
+	          <div class="form-group">
+	              <label for="endDate">End Date</label>
+	              <ct-date-picker 
+	                ct-dtp-id="endDate" ct-dtp-name="endDate"
+	                ct-dtp-model="vm.endDate"
+	                ct-dtp-required="true">
+	              </ct-date-picker>
+	          </div>
+	        </div>
+
+	        <div class="col-xs-12 col-sm-3 col-md-3">
+	          <div class="form-group">
+	              <label for="clientName">Client Name</label>
+	              <input type="text" class="form-control" id="clientName" name="clientName" ng-model="vm.clientName">
+	          </div>
+	        </div>
+
+	        <div class="col-xs-12 col-sm-2 col-md-2">
+	          <div class="form-group">
+	              <label for="clientPhone">Phone</label>
+	              <input type="number" class="form-control" id="clientPhone" name="clientPhone" ng-model="vm.clientPhone">
+	          </div>
+	        </div>
+
+	        <div class="col-xs-12 col-sm-2 col-md-2">
+	          <div class="form-group">
+	              <label for="clientEmail">E-mail</label>
+	              <input type="email" class="form-control" id="clientEmail" name="clientEmail" ng-model="vm.clientEmail">
+	          </div>
+	        </div>
+
+	        <div class="col-xs-12 col-sm-12 col-md-12" style="text-align: center;">
+	          <button class="btn btn-default" ng-click="vm.doSearch()">Search</button>
+	        </div>
+
+	      </form>
+	    </div>
+	  </div>
+	</div>
+</div>

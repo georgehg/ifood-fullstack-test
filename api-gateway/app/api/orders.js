@@ -29,15 +29,16 @@ const api = function(app) {
 
             linkHelper.getLink(ORDERS_URL_PATH).then(function(orderListUrl) {
                 if (!orderListUrl) {
-                    return reject("Service not Available");
+                    reject("Service not Available");
+                    return;
                 }
 
                 request({url: orderListUrl}, function(err, resp, body) {
                     if(err) {
                         console.log(err);
-                        return reject(err);                  
+                        reject(err);
                     } else {
-                        return resolve(responseHelper.handle(resp, body));
+                        resolve(responseHelper.handle(resp, body));
                     }
                 });            
             });
@@ -52,15 +53,16 @@ const api = function(app) {
 
             linkHelper.getLink(ORDERS_URL_PATH).then(function(orderFindUrl) {
                 if (!orderFindUrl) {
-                    return reject("Service not Available");
+                    reject("Service not Available");
+                    return;
                 }
 
                 request({url: orderFindUrl+"/"+id}, function(err, resp, body) {
                     if(err) {
                         console.log(err);
-                        return reject(err);                  
+                        reject(err);                  
                     } else {
-                        return resolve(responseHelper.handle(resp, body));
+                        resolve(responseHelper.handle(resp, body));
                     }
                 });
             });

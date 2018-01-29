@@ -1,0 +1,16 @@
+{
+  "name": "webapp",
+  "version": "1.0.0",
+  "description": "Frontend for iFood Fullstack demo",
+  "main": "server.js",
+  "scripts": {
+    "postinstall": "bower install",
+    "start": "node src/server/server.js"
+  },
+  "author": "george.silva",
+  "license": "ISC",
+  "private": true,
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}

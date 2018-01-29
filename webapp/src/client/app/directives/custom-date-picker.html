@@ -1,0 +1,14 @@
+<span class="input-group">
+    <input type="text" class="form-control" id="{{ctDtpId}}" name="{{ctDtpName}}"
+            uib-datepicker-popup="{{ctDtpFormat}}"
+            datepicker-options="ctDtpOptions"
+            ng-model="ctDtpModel"
+            type="date"
+            ng-model-options="{timezone: '-0300'}"
+            is-open="opened"
+            ng-required="{{ctDtpRequired}}"
+            alt-input-formats="altInputFormats""/>
+    <span class="input-group-btn">
+        <button type="button" class="btn btn-default" ng-click="open()"><i class="glyphicon glyphicon-calendar"></i></button>
+    </span>
+</span>
