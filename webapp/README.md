@@ -1,6 +1,6 @@
 # iFood Fullstack Test Frontend WebApp
 
-Front web Application developed in AngularJS 1.6.
+Front web Application developed in [AngularJS 1.6](https://angularjs.org/).
 
 ## Installation
 
@@ -16,12 +16,14 @@ npm install
 
 The server port is defaulted to 7200, but it can be changed creating an environment variable named `WEB_PORT` with another port number.
 
+### API Gateway Configuration
+
 Two environment variables can be created to configure the API Gateway address:
 
-- To configure API Gateway host address create variable GTW_HOST
-- To configure API Gateway port number create variable GTW_PORT
+- Set API Gateway host address creating variable `GTW_HOST`
+- Set API Gateway port number creating variable `GTW_PORT`
 
-If this two variables is are not created at server startup, the API Gateway address will be defaulted to `localhost:5200`
+The API Gateway address will be defaulted to `GTW_HOST=localhost` or `GTW_PORT=5200` in case any of these two variables was not created at server startup.
 
 ## Running
 
@@ -36,5 +38,5 @@ npm start
 The webapp can now be accessed by server address followed by the port number:
 
 ```js
-http://localhost:5200
+http://localhost:7200
 ```

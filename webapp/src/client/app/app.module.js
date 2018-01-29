@@ -80,8 +80,6 @@ angular
     function appRun(apiResource, environment) {
         apiResource.get(function(api) {
 
-            console.log(api);
-
             environment.setEnvironments({
                 local: {
                     root: 'http://localhost',

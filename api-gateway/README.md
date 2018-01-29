@@ -1,6 +1,6 @@
 # iFood Fullstack Test API Gateway
 
-This is a thin APÌ Gateway developed in NodeJS. It uses [express](http://expressjs.com/) framework to exposes API routes to frontend and uses [request](https://www.npmjs.com/package/request) to make HTTP calls and consume the RESTfull services provided by Spring microservices.
+This is a thin API Gateway developed in [NodeJS](https://nodejs.org/en). It uses [express](http://expressjs.com/) framework to exposes API routes to frontend and uses [request](https://www.npmjs.com/package/request) NodeJS too to make HTTP calls and consume the RESTfull services provided by Spring microservices.
 
 This application consolidates the microservices funcionalities, providing one API endpoint for frontend and implementing an orders search processor.
 
@@ -18,7 +18,7 @@ npm install
 
 The server port is defaulted to 5200, but it can be changed creating an environment variable named `GTW_PORT` with another port number.
 
-The microservices host address and ports can be configured editing the file [gateway.json](./app/config/gateway.json). The application will use this file to connect and discover the microservices REST API´s traversing the endpoints HAL links.
+The microservices host address and ports can be configured editing the file [gateway.json](./app/config/gateway.json). The application will use this file to connect and discover the microservices REST API´s, traversing the endpoints from HAL links.
 
 ## Running
 
