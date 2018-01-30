@@ -1,6 +1,6 @@
-# iFood Fullstack Test Frontend WebApp
+# Frontend WebApp
 
-Front web Application developed in [AngularJS 1.6](https://angularjs.org/).
+Frontend Web Application developed in [AngularJS 1.6](https://angularjs.org/).
 
 ## Installation
 

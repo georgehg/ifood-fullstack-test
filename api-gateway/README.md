@@ -1,4 +1,4 @@
-# iFood Fullstack Test API Gateway
+# API Gateway
 
 This is a thin API Gateway developed in [NodeJS](https://nodejs.org/en). It uses [express](http://expressjs.com/) framework to exposes API routes to frontend and uses [request](https://www.npmjs.com/package/request) NodeJS too to make HTTP calls and consume the RESTfull services provided by Spring microservices.
 
